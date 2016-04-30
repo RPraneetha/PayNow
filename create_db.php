@@ -27,9 +27,12 @@
   		v_pwd VARCHAR(20) DEFAULT 'default',
   		v_name VARCHAR(30) NOT NULL,
         v_shop VARCHAR(30) NOT NULL,
+        v_email VARCHAR(30) NOT NULL,
   		v_account INT DEFAULT 0 CHECK(v_account >= 0),
         v_active INT DEFAULT 1 CHECK(v_active IN (0,1)),
-  		CONSTRAINT pk2a  PRIMARY KEY(v_id) 
+  		CONSTRAINT pk2a  PRIMARY KEY(v_id),
+        CONSTRAINT chk_v CHECK (v_account > 0)
+
 	)";
 	$result2a=mysqli_query($connect,$qry2a);
 	
@@ -54,14 +57,15 @@
         c_pwd VARCHAR(30) NOT NULL,
   		c_account INT DEFAULT 0 CHECK(c_account >= 0),
         c_active INT DEFAULT 1 CHECK(c_active IN(0,1)),
-  		CONSTRAINT pk3a PRIMARY KEY(c_id)
+  		CONSTRAINT pk3a PRIMARY KEY(c_id),
+        CONSTRAINT chk_c CHECK (c_account > 0)
 	)";
 	$result3a=mysqli_query($connect,$qry3a);
 
     $qry2c="
 	CREATE TABLE vendor_logs
 	(
-  		vl_id INT NOT NULL,
+  		vl_id INT AUTO_INCREMENT,
         v_id INT NOT NULL,
         c_id INT NOT NULL,
   		c_price INT NOT NULL,
@@ -71,10 +75,20 @@
 	)";
 	$result2c=mysqli_query($connect,$qry2c);
 
+    $qry2d="
+	CREATE TABLE temp_cart
+	(
+  		item_no INT NOT NULL,
+  		item_nm VARCHAR(20) NOT NULL,
+  		item_price INT DEFAULT 10
+	)";
+	$result2d=mysqli_query($connect,$qry2d);
+
+
     $qry3b="
 	CREATE TABLE cust_logs
 	(
-  		cl_id INT NOT NULL,
+  		cl_id INT AUTO_INCREMENT,
         v_id INT NOT NULL,
         c_id INT NOT NULL,
   		c_price INT NOT NULL,
